@@ -32,8 +32,6 @@ const Register = () => {
 
   async function registerUser() {
     const registrationData = {
-      firstname: values.firstName,
-      lastname: values.lastName,
       username: values.username,
       password: values.password,
       email: values.email,

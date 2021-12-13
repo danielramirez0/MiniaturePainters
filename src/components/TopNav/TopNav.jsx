@@ -20,47 +20,61 @@ const TopNav = () => {
     return (
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand href="/">Miniature Painters</Navbar.Brand>
+          <Navbar.Brand><Link to="/" className="navbar-brand">Miniature Painters</Link></Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
               {auth.jwt ? (
-                <Link to="/login" className="nav-link">
-                  Login
+                <Link to="dashboard/projects" className="nav-link">
+                  My Projects
                 </Link>
               ) : (
-                <Link to="/login" className="nav-link">
+                <Link to="login" className="nav-link">
                   Login
                 </Link>
               )}
               <NavDropdown title="Explore" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="/explore/painters">
-                  Painters
+                <NavDropdown.Item as="li">
+                  <Link to="explore/painters" className="dropdown-item">
+                    Painters
+                  </Link>
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/explore/projects">
-                  Projects
+                <NavDropdown.Item as="li">
+                  <Link to="explore/projects" className="dropdown-item">
+                    Projects
+                  </Link>
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/explore/games">Games</NavDropdown.Item>
+                <NavDropdown.Item as="li">
+                  <Link to="explore/games" className="dropdown-item">
+                    Games
+                  </Link>
+                </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href="/projects/new">
-                  Start a project!
+                <NavDropdown.Item as="li">
+                  <Link to="dashboard/projects/new" className="dropdown-item">
+                    Start a project!
+                  </Link>
                 </NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="Learn" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="/learn/basics">Basics</NavDropdown.Item>
-                <NavDropdown.Item href="/learn/advanced">
-                  Advanced
+                <NavDropdown.Item as="li">
+                  <Link to="learn/basics" className="dropdown-item">Basics</Link>
+                </NavDropdown.Item>
+                <NavDropdown.Item as="li">
+                  <Link to="learn/advanced" className="dropdown-item">Advanced</Link>
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href="/learn">
-                  Get started learning!
+                <NavDropdown.Item as="li">
+                  <Link to="learn" className="dropdown-item">
+                    Learn how to paint!
+                  </Link>
                 </NavDropdown.Item>
               </NavDropdown>
             </Nav>
             <Nav>
-              <Nav.Link href="/myjourney" disabled={!auth.jwt ? true : false}>
-                {!auth.jwt ? "Login for more features!" : "My Palet"}
-              </Nav.Link>
+              <Nav.Item as="li">
+                {!auth.jwt ? "Login for more features!" : <Link to="dashboard" className="nav-link">My Dashboard</Link>}
+              </Nav.Item>
               {auth.jwt ? <Nav.Link href="/logoff">Logoff</Nav.Link> : null}
             </Nav>
           </Navbar.Collapse>

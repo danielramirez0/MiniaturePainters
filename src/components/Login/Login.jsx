@@ -16,11 +16,11 @@ const Login = () => {
   const navigate = useNavigate();
   const auth = useAuth();
   const api = useAPI();
-  const from = window.location.state?.from?.pathname || "/";
+  const from = window.location.state?.from?.pathname || "/dashboard";
 
   useEffect(() => {
     if (auth.jwt) {
-      navigate("/");
+      navigate("/dashboard");
     } else {
       checkCache();
     }
