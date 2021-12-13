@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import useAuth from "../useAuth/useAuth";
+import logo from "../../static/logo.png";
+import "./topnav.css";
 
 const TopNav = () => {
   const auth = useAuth();
@@ -18,9 +20,19 @@ const TopNav = () => {
 
   function renderNav() {
     return (
-      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+      <Navbar
+        collapseOnSelect
+        expand="lg"
+        bg="dark"
+        variant="dark"
+        className="mt-4 mb-4"
+      >
         <Container>
-          <Navbar.Brand><Link to="/" className="navbar-brand">Miniature Painters</Link></Navbar.Brand>
+          <Navbar.Brand>
+            <Link to="/" className="navbar-brand">
+              Home
+            </Link>
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
@@ -28,11 +40,7 @@ const TopNav = () => {
                 <Link to="dashboard/projects" className="nav-link">
                   My Projects
                 </Link>
-              ) : (
-                <Link to="login" className="nav-link">
-                  Login
-                </Link>
-              )}
+              ) : null}
               <NavDropdown title="Explore" id="collasible-nav-dropdown">
                 <NavDropdown.Item as="li">
                   <Link to="explore/painters" className="dropdown-item">
@@ -58,10 +66,14 @@ const TopNav = () => {
               </NavDropdown>
               <NavDropdown title="Learn" id="collasible-nav-dropdown">
                 <NavDropdown.Item as="li">
-                  <Link to="learn/basics" className="dropdown-item">Basics</Link>
+                  <Link to="learn/basics" className="dropdown-item">
+                    Basics
+                  </Link>
                 </NavDropdown.Item>
                 <NavDropdown.Item as="li">
-                  <Link to="learn/advanced" className="dropdown-item">Advanced</Link>
+                  <Link to="learn/advanced" className="dropdown-item">
+                    Advanced
+                  </Link>
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item as="li">
@@ -73,9 +85,14 @@ const TopNav = () => {
             </Nav>
             <Nav>
               <Nav.Item as="li">
-                {!auth.jwt ? "Login for more features!" : <Link to="dashboard" className="nav-link">My Dashboard</Link>}
+                {!auth.jwt ? (
+                  "Login for more features!"
+                ) : (
+                  <Link to="dashboard" className="nav-link">
+                    My Dashboard
+                  </Link>
+                )}
               </Nav.Item>
-              {auth.jwt ? <Nav.Link href="/logoff">Logoff</Nav.Link> : null}
             </Nav>
           </Navbar.Collapse>
         </Container>

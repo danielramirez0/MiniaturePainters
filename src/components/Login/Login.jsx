@@ -4,24 +4,27 @@ import useForm from "../useForm/useForm";
 import useAPI from "../useAPI/useAPI";
 import useAuth from "../../components/useAuth/useAuth";
 import { Link, useNavigate } from "react-router-dom";
-import { Spinner, ToastContainer } from "react-bootstrap";
-import { Toast } from "react-bootstrap";
+import {
+  ToastContainer,
+  Toast,
+  Navbar,
+  Container,
+  Form,
+  FormControl,
+  Button,
+} from "react-bootstrap";
 import { defaultPostRequest as loginUser } from "../../static/main";
 
 const Login = () => {
   const { values, handleChange, handleSubmit } = useForm(login);
-  const [checked, setChecked] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const auth = useAuth();
   const api = useAPI();
-  const from = window.location.state?.from?.pathname || "/dashboard";
+  const from = window.location.state?.from?.pathname || "/";
 
   useEffect(() => {
-    if (auth.jwt) {
-      navigate("/dashboard");
-    } else {
+    if (!auth.jwt) {
       checkCache();
     }
   }, []);
@@ -36,7 +39,6 @@ const Login = () => {
   }
 
   function login() {
-    setIsLoading(true);
     getJwt();
   }
 
@@ -48,9 +50,7 @@ const Login = () => {
     const response = await loginUser(`${api.url}auth/login/`, credentials);
     if (response) {
       const { access } = response.data;
-      if (checked) {
-        localStorage.setItem("token", access);
-      }
+      localStorage.setItem("token", access);
       auth.signin(access, () => {
         // Send them back to the page they tried to visit when they were
         // redirected to the login page. Use { replace: true } so we don't create
@@ -62,13 +62,52 @@ const Login = () => {
       });
     } else {
       setShowToast(true);
-      setIsLoading(false);
     }
   };
 
   function renderLogin() {
     return (
       <React.Fragment>
+        <Navbar bg="dark" variant="dark">
+          <Container>
+            <Navbar.Brand>Miniature Painters</Navbar.Brand>
+            <Navbar.Toggle />
+            <Navbar.Collapse className="justify-content-end">
+              {auth.jwt ? (
+                <Navbar.Text>
+                  Signed in as: <a href="/logoff">Mark Otto</a>
+                </Navbar.Text>
+              ) : (
+                <React.Fragment>
+                  <Form className="d-flex" onSubmit={handleSubmit}>
+                    <FormControl
+                      type="text"
+                      name="username"
+                      value={values.username || ""}
+                      onChange={handleChange}
+                      placeholder="username"
+                      className="me-2"
+                      aria-label="username"
+                    />
+                    <FormControl
+                      type="password"
+                      name="password"
+                      value={values.password || ""}
+                      onChange={handleChange}
+                      placeholder="password"
+                      className="me-2"
+                      aria-label="password"
+                    />
+                    <Button type="submit">Login</Button>
+                  </Form>
+                  <Link to="/register" className="nav-link">
+                    Sign up
+                  </Link>
+                </React.Fragment>
+              )}
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
         <ToastContainer className="p-3" position="top-end">
           <Toast
             className="toast"
@@ -91,77 +130,6 @@ const Login = () => {
             </Toast.Body>
           </Toast>
         </ToastContainer>
-        <div className="account-form m-auto">
-          <div className="ms-2 me-2">
-            <form onSubmit={handleSubmit}>
-              <fieldset>
-                <div className="d-grid gap-4 ms-4 me-4">
-                  <div className="form-group">
-                    <div className="form-group">
-                      <div className="form-floating mb-3">
-                        <input
-                          type="text"
-                          name="username"
-                          className="form-control"
-                          id="floatingUsername"
-                          placeholder="bob123"
-                          value={values.username || ""}
-                          onChange={handleChange}
-                        />
-                        <label htmlFor="floatingUsername">Username</label>
-                      </div>
-                      <div className="form-floating">
-                        <input
-                          type="password"
-                          name="password"
-                          className="form-control"
-                          id="floatingPassword"
-                          placeholder="Password"
-                          value={values.password || ""}
-                          onChange={handleChange}
-                        />
-                        <label htmlFor="floatingPassword">Password</label>
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    className="btn btn-lg btn-primary"
-                    type="submit"
-                    hidden={isLoading ? true : false}
-                  >
-                    Login
-                  </button>
-                  <Spinner
-                    className="m-auto"
-                    animation="border"
-                    role="status"
-                    hidden={isLoading ? false : true}
-                  >
-                    <span className="visually-hidden">Loading...</span>
-                  </Spinner>
-                  <div className="form-check m-auto">
-                    <input
-                      type="checkbox"
-                      name="saveLogin"
-                      className="form-check-input"
-                      id="saveLogin"
-                      onChange={() => setChecked(!checked)}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckChecked"
-                    >
-                      Remember me on this computer
-                    </label>
-                  </div>
-                </div>
-              </fieldset>
-            </form>
-            <small>Not registered?</small>
-            <Link to="/register"> Register</Link>
-          </div>
-          {/* <img src={''} alt="Motto" /> */}
-        </div>
       </React.Fragment>
     );
   }
