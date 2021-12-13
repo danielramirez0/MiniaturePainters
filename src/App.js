@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import "bootswatch/dist/darkly/bootstrap.min.css";
+import "./App.css";
+import Login from "./components/Login/Login";
+import Logoff from "./components/Logoff/Logoff";
+import Register from "./components/Register/Register";
+import Home from "./components/Home/Home";
+import AuthProvider from "./components/AuthProvider/AuthProvider";
+import APIProvider from "./components/APIProvider/APIProvider";
+import TopNav from "./components/TopNav/TopNav";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <APIProvider>
+        <div className="App">
+          <TopNav></TopNav>
+          <div className="container">
+              <Routes>
+                <Route path="/" exact element={<Home />} />
+                <Route path="/login" exact element={<Login />} />
+                <Route path="/logoff" element={<Logoff />} />
+                <Route path="/register" element={<Register />} />
+              </Routes>
+            </div>
+          </div>
+      </APIProvider>
+    </AuthProvider>
   );
 }
 
