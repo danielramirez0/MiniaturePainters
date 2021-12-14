@@ -5,6 +5,7 @@ import useAPI from "../useAPI/useAPI";
 import { useParams } from "react-router-dom";
 import dateFormat from "dateformat";
 import Post from "../Post/Post";
+import { Button } from "react-bootstrap";
 
 const Project = () => {
   const [posts, setPosts] = useState([]);
@@ -41,7 +42,7 @@ const Project = () => {
   function renderProject() {
     return (
       <React.Fragment>
-        <div className="row">
+        <div className="row mt-4 mb-4">
           <div className="col">
             <p>Name</p>
             <h1>{details.name}</h1>
@@ -59,8 +60,11 @@ const Project = () => {
             <h3>{details.likes}</h3>
           </div>
         </div>
-        <div className="row">
+        <div className="row mt-4 mb-4">
           <p>{details.description}</p>
+        </div>
+        <div className="row mt-4 mb-4">
+          <Button className="btn btn-secondary">Add Update Post!</Button>
         </div>
         {posts.map((post) => (
           <Post

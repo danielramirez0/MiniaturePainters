@@ -48,6 +48,7 @@ function App() {
                 <Route path="basics" element={<Basics />} />
                 <Route path="advanced" element={<Advanced />} />
               </Route>
+              <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
           </div>
         </div>
