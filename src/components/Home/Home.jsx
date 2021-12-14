@@ -5,11 +5,11 @@ import "./home.css";
 const Home = () => {
   return (
     <React.Fragment>
-      <div class="accordion" id="home-accordian">
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingOne">
+      <div className="accordion" id="home-accordian">
+        <div className="accordion-item">
+          <h2 className="accordion-header" id="headingOne">
             <button
-              class="accordion-button"
+              className="accordion-button"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#collapseOne"
@@ -21,11 +21,11 @@ const Home = () => {
           </h2>
           <div
             id="collapseOne"
-            class="accordion-collapse collapse show"
+            className="accordion-collapse collapse show"
             aria-labelledby="headingOne"
             data-bs-parent="#home-accordian"
           >
-            <div class="accordion-body">
+            <div className="accordion-body">
               <strong>Start a new project and begin painting!</strong>
               <code>
                 <div className="row mt-4">
@@ -44,10 +44,10 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingTwo">
+        <div className="accordion-item">
+          <h2 className="accordion-header" id="headingTwo">
             <button
-              class="accordion-button collapsed"
+              className="accordion-button collapsed"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#collapseTwo"
@@ -59,11 +59,11 @@ const Home = () => {
           </h2>
           <div
             id="collapseTwo"
-            class="accordion-collapse collapse"
+            className="accordion-collapse collapse"
             aria-labelledby="headingTwo"
             data-bs-parent="#home-accordian"
           >
-            <div class="accordion-body">
+            <div className="accordion-body">
               <strong>
                 Post updates for follows to see the progress you've made
               </strong>
@@ -84,10 +84,10 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingThree">
+        <div className="accordion-item">
+          <h2 className="accordion-header" id="headingThree">
             <button
-              class="accordion-button collapsed"
+              className="accordion-button collapsed"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#collapseThree"
@@ -99,11 +99,11 @@ const Home = () => {
           </h2>
           <div
             id="collapseThree"
-            class="accordion-collapse collapse"
+            className="accordion-collapse collapse"
             aria-labelledby="headingThree"
             data-bs-parent="#home-accordian"
           >
-            <div class="accordion-body">
+            <div className="accordion-body">
               <strong>Get inspired</strong>
               <code>
                 <div className="row mt-4">
