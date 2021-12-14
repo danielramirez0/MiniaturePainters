@@ -34,7 +34,7 @@ const Painters = () => {
     return (
       <React.Fragment>
         {painters.map((painter) => (
-          <div className="col">
+          <div className="col" key={painter.id}>
             <Card style={{ width: "18rem" }} className="m-auto">
               <Card.Img variant="top" src="/static/img/avatar.jpg" />
               <Card.Body>

@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { defaultGetRequest as getData } from "../../static/main";
+import {
+  defaultGetRequest as getData,
+  protectedEnpointPostRequest as postFollow,
+  protectedEnpointDeleteRequest as postUnfollow,
+  protectedEnpointGetRequest as getIsFollowing,
+} from "../../static/main";
+
 import useAuth from "../useAuth/useAuth";
 import useAPI from "../useAPI/useAPI";
 import { ListGroup, Spinner, Button } from "react-bootstrap";
@@ -8,17 +14,18 @@ import { useNavigate, useParams } from "react-router-dom";
 const Painter = () => {
   const [painter, setPainter] = useState([]);
   const [projects, setProjects] = useState([]);
+  const [following, setFollowing] = useState(false);
   const auth = useAuth();
   const api = useAPI();
   const from = window.location.state?.from?.pathname || "/";
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { painterId } = useParams();
 
   useEffect(() => {
     getPainter();
+    checkIsFollowing();
     getProjects();
-    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -32,14 +39,47 @@ const Painter = () => {
     }
   };
 
-  const followPainter = async () => {
-      const response = await postFollow(`${api.url}`)
-  }
-
   const getProjects = async () => {
     const response = await getData(`${api.url}projects/user/?id=${painterId}`);
     if (response) {
       await setProjects(response.data);
+    }
+  };
+
+  const checkIsFollowing = async () => {
+    const response = await getIsFollowing(
+      `${api.url}painters/follow/${painterId}`,
+      auth.jwt
+    );
+    if (response) {
+      if (response.data.length === 1) {
+        await setFollowing(true);
+      } else {
+        await setFollowing(false);
+      }
+    }
+  };
+
+  const followPainter = async () => {
+    const response = await postFollow(
+      `${api.url}painters/follow/${painterId}`,
+      {},
+      auth.jwt
+    );
+    if (response) {
+      await setFollowing(true);
+    }
+  };
+
+  const unfollowPainter = async () => {
+    const response = await postUnfollow(
+      `${api.url}painters/unfollow/${painterId}`,
+      auth.jwt
+    );
+    if (response) {
+      await setFollowing(false);
+    } else {
+      console.log("Error during unfollow");
     }
   };
 
@@ -54,9 +94,13 @@ const Painter = () => {
   function renderPainter() {
     return (
       <React.Fragment>
-        {auth.jwt && (
+        {auth.jwt && following ? (
+          <button className="btn btn-link" onClick={() => unfollowPainter()}>
+              Unfollow
+          </button>
+        ) : (
           <button className="btn btn-link" onClick={() => followPainter()}>
-            Follow
+              Follow
           </button>
         )}
         <h1>{painter.username}'s Projects</h1>

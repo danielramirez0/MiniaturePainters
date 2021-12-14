@@ -14,6 +14,7 @@ import {
   Button,
 } from "react-bootstrap";
 import { defaultPostRequest as loginUser } from "../../static/main";
+import jwtDecode from "jwt-decode";
 
 const Login = () => {
   const { values, handleChange, handleSubmit } = useForm(login);
@@ -22,6 +23,7 @@ const Login = () => {
   const auth = useAuth();
   const api = useAPI();
   const from = window.location.state?.from?.pathname || "/";
+  const [userDetails, setUserDetails] = useState({});
 
   useEffect(() => {
     if (!auth.jwt) {
@@ -29,12 +31,24 @@ const Login = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (auth.jwt) {
+      decodeJWT();
+    }
+  }, [auth.jwt]);
+
   function checkCache() {
     const cache = localStorage.getItem("token");
     if (cache) {
       auth.signin(cache, () => {
         navigate(from);
       });
+    }
+  }
+
+  function decodeJWT() {
+    if (auth.jwt) {
+      setUserDetails(jwtDecode(auth.jwt));
     }
   }
 
@@ -75,7 +89,7 @@ const Login = () => {
             <Navbar.Collapse className="justify-content-end">
               {auth.jwt ? (
                 <Navbar.Text>
-                  Signed in as: <a href="/logoff">Mark Otto</a>
+                  Signed in as: <a href="/logoff">{userDetails.user_id}</a>
                 </Navbar.Text>
               ) : (
                 <React.Fragment>
