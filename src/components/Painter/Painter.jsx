@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import { defaultGetRequest as getData } from "../../static/main";
 import useAuth from "../useAuth/useAuth";
 import useAPI from "../useAPI/useAPI";
-import {
-  ListGroup,
-  Spinner,
-} from "react-bootstrap";
+import { ListGroup, Spinner, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 
 const Painter = () => {
@@ -35,6 +32,10 @@ const Painter = () => {
     }
   };
 
+  const followPainter = async () => {
+      const response = await postFollow(`${api.url}`)
+  }
+
   const getProjects = async () => {
     const response = await getData(`${api.url}projects/user/?id=${painterId}`);
     if (response) {
@@ -53,6 +54,11 @@ const Painter = () => {
   function renderPainter() {
     return (
       <React.Fragment>
+        {auth.jwt && (
+          <button className="btn btn-link" onClick={() => followPainter()}>
+            Follow
+          </button>
+        )}
         <h1>{painter.username}'s Projects</h1>
         <ListGroup>
           {projects.map((project) => (
@@ -60,10 +66,10 @@ const Painter = () => {
               action
               onClick={() => navigate(`/explore/projects/${project.id}`)}
             >
-                <div className="row">
-                    <div className="col">{project.name}</div>
-                    <div className="col">{project.likes} Likes</div>
-                </div>
+              <div className="row">
+                <div className="col">{project.name}</div>
+                <div className="col">{project.likes} Likes</div>
+              </div>
             </ListGroup.Item>
           ))}
         </ListGroup>

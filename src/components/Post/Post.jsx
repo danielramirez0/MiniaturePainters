@@ -5,10 +5,12 @@ import useForm from "../useForm/useForm";
 import useAuth from "../useAuth/useAuth";
 import useAPI from "../useAPI/useAPI";
 import { Form, FormControl, Button, Accordion } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
 import { Card } from "react-bootstrap";
 import Comment from "../Comment/Comment";
 import dateFormat from "dateformat";
+import AccordionHeader from "react-bootstrap/esm/AccordionHeader";
+import AccordionBody from "react-bootstrap/esm/AccordionBody";
+import AccordionItem from "react-bootstrap/esm/AccordionItem";
 
 const Post = (props) => {
   const { values, handleChange, handleSubmit } = useForm(submitComment);
@@ -17,7 +19,6 @@ const Post = (props) => {
   const [fetchComments, setFetchComments] = useState(true);
   const auth = useAuth();
   const api = useAPI();
-  const { projectId } = useParams();
   const [showNewComment, setShowNewComment] = useState(false);
 
   useEffect(() => {
@@ -42,7 +43,6 @@ const Post = (props) => {
       await setLoading(true);
       await setFetchComments(true);
     }
-    return;
   }
 
   function renderAddComment() {
@@ -68,7 +68,7 @@ const Post = (props) => {
     if (commentsResponse) {
       await setComments(commentsResponse.data);
     }
-    await setFetchComments(false)
+    await setFetchComments(false);
     await setLoading(false);
   };
 
@@ -91,18 +91,29 @@ const Post = (props) => {
           >
             Add A Comment
           </Button>
-          <h4>Comments</h4>
-          {showNewComment && auth.jwt ? renderAddComment() : null}
-          <Accordion defaultActiveKey="0">
-            {comments.map((comment) => (
-              <Comment
-                key={comment.id}
-                user={comment.user_id}
-                posted={dateFormat(comment.posted)}
-                body={comment.body}
-                commentId={comment.id}
-              ></Comment>
-            ))}
+          <Accordion defaultActiveKey={props.postId}>
+            <AccordionItem eventKey={props.postId}>
+              <AccordionHeader>
+                <h4>Comments</h4>
+              </AccordionHeader>
+              <AccordionBody>
+                {showNewComment && auth.jwt ? renderAddComment() : null}
+                <Accordion defaultActiveKey="0">
+                  {comments.map((comment) => (
+                    <Comment
+                      key={comment.id}
+                      user={comment.user_id}
+                      posted={dateFormat(comment.posted, "ddd mmm dd yyyy HH:MM TT Z")}
+                      body={comment.body}
+                      commentId={comment.id}
+                      toggleFetchComments={() =>
+                        setFetchComments(!fetchComments)
+                      }
+                    ></Comment>
+                  ))}
+                </Accordion>
+              </AccordionBody>
+            </AccordionItem>
           </Accordion>
         </div>
       </React.Fragment>
