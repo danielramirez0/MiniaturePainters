@@ -32,6 +32,8 @@ const Projects = () => {
   function renderProjects() {
     return projects.map((project) => (
       <ProjectCard
+        key={project.id}
+        id={project.id}
         name={project.name}
         user_id={project.user_id}
         start_date={project.start_date}

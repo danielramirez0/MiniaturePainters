@@ -62,8 +62,13 @@ const Project = () => {
         <div className="row">
           <p>{details.description}</p>
         </div>
-        {posts.map((post)=>(
-            <Post posted={dateFormat(post.posted)} body={post.body}></Post>
+        {posts.map((post) => (
+          <Post
+            key={post.id}
+            posted={dateFormat(post.posted)}
+            body={post.body}
+            postId={post.id}
+          ></Post>
         ))}
       </React.Fragment>
     );

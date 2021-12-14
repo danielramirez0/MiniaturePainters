@@ -7,54 +7,70 @@ import {
   Container,
   Form,
   FormControl,
+  Accordion,
 } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 import useForm from "../useForm/useForm";
 import useAPI from "../useAPI/useAPI";
 import useAuth from "../../components/useAuth/useAuth";
+import Reply from "../Reply/Reply";
+import { defaultGetRequest as getData } from "../../static/main";
 
 const Comment = (props) => {
-  const { values, handleChange, handleSubmit } = useForm(submitComment);
-  const [showReplies, setShowReplies] = useState(false);
-  const [showNewComment, setShowNewComment] = useState(false);
+  const { values, handleChange, handleSubmit } = useForm(submitReply);
+  const [showNewReply, setShowNewReply] = useState(false);
+  const [replies, setReplies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const auth = useAuth();
+  const api = useAPI();
+  const from = window.location.state?.from?.pathname || "/";
 
-  function renderAddComment() {
-    return (
-      <Form className="d=flex" onSubmit={handleSubmit}>
-        <FormControl
-          type="text"
-          name="body"
-          value={values.body || ""}
-          onChange={handleChange}
-          placeholder="Type comment here"
-          className="me-2"
-          aria-label="body"
-        />
-        <Button type="submit">Submit</Button>
-      </Form>
+ 
+  function submitReply() {
+      return
+  }
+
+ 
+
+  const getReplies = async () => {
+    const response = await getData(
+      `${api.url}projects/comments/${props.commentId}`
     );
-  }
-
-  function submitComment() {
-    return;
-  }
+    if (response) {
+      await setReplies(response.data);
+    }
+    setLoading(false);
+  };
 
   function renderComment() {
     return (
       <React.Fragment>
-        <div className="row row-cols-4">
-          <div className="col">User: {props.user}</div>
-          <div className="col">On: {props.posted}</div>
-          <div className="col">{props.body}</div>
-          <div className="col">
-            <Button type="button" onClick={() => setShowReplies(true)}>
-              Reply
-            </Button>
-          </div>
-        </div>
-        <Button type="button" onClick={() => setShowNewComment(true)}>
-          Comment
-        </Button>
-        {showNewComment ? renderAddComment() : null}
+        <Accordion.Item eventKey={props.commentId}>
+          <Accordion.Header>
+            <div className="col-1">User: {props.user}</div>
+            <div className="col-1">On: {props.posted}</div>
+            <div className="col-8 text-center">{props.body}</div>
+            <div className="col-1">
+              <Button
+                type="button"
+                onClick={() => setShowNewReply(true)}
+                hidden={!auth.jwt}
+              >
+                Reply
+              </Button>
+            </div>
+          </Accordion.Header>
+          <Accordion.Body>
+            {replies.map((reply) => (
+              <Reply
+                user={reply.user}
+                posted={reply.posted}
+                body={reply.body}
+              />
+            ))}
+          </Accordion.Body>
+        </Accordion.Item>
       </React.Fragment>
     );
   }
